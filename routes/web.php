@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('register-data-customer', [RegisterController::class, 'register'])->name('customers.register');
+Route::post('register-data-customer', [RegisterController::class, 'storeData'])->name('customers.store.data');
+
+Route::get('order-resume', [OrderController::class, 'resume'])->name('orders.resume');
 
 //Route::get('orders', []);
 //Route::get('orders/resume', []);
