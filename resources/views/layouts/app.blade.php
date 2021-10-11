@@ -18,6 +18,14 @@
     </style>
 </head>
 <body class="antialiased">
-    @yield('content')
+<div class="flex-none relative px-10 text-sm leading-6 font-medium ring-1 ring-gray-900 ring-opacity-5 py-5 bg-white text-right">
+    <a href="{{ route('home') }}" class="px-5 text-sm text-gray-700 hover:underline hover:text-blue-700">Inicio</a>
+    @auth
+        <a href="{{ route('orders.list')  }}" class="text-sm text-gray-700 hover:underline hover:text-blue-700">Mis ordenes</a>
+    @endauth
+
+</div>
+
+@yield('content')
 </body>
 </html>

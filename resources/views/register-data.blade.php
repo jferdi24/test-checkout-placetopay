@@ -1,5 +1,5 @@
 @extends('layouts.app',[
-    'title' => 'Register Data Customer',
+    'title' => 'Confirmar datos para la orden',
 ])
 @section('content')
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
@@ -31,7 +31,7 @@
                             <h3 class="font-semibold text-black mb-0.5">${{ $product->price }} USD</h3>
                             <div>
                                 <label for="">Cantidad:</label>
-                                <input type="text" class="form-input rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full" name="quantity" required value="1">
+                                <input type="number" class="form-input rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full" name="quantity" required value="1">
                             </div>
                         </div>
                     </article>
@@ -39,7 +39,7 @@
                 <hr>
                 <div>
                     <button type="submit" class="mt-2 bg-blue-900 block hover:bg-blue-600 px-2 py-2 rounded text-center text-white w-full">
-                        <span>Continuar</span>
+                        <span>Crear orden</span>
                     </button>
                 </div>
             </form>
