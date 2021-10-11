@@ -17,6 +17,12 @@
         <th scope="col"
             class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Total
         </th>
+        @if($showCustomer)
+            <th scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Cliente
+            </th>
+        @endif
         <th scope="col"
             class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
             Estado
@@ -35,6 +41,13 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $order->created_at }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $order->code }}</td>
             <td class="px-6 py-4 whitespace-nowrap">$ {{ $order->total }} USD</td>
+            @if($showCustomer)
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <p>{{ $order->customer->name }}</p>
+                    <p>{{ $order->customer->email }}</p>
+                    <p>{{ $order->customer->mobile }}</p>
+                </td>
+            @endif
             <td class="px-6 py-4 whitespace-nowrap">
                 {!! $order->statusLabel() !!}
             </td>
