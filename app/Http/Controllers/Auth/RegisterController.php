@@ -42,12 +42,16 @@ class RegisterController extends Controller
 
     protected function createCustomer(Request $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
-            'password' => bcrypt(Str::uuid())
-        ]);
+        $user = User::updateOrcreate(
+            [
+                'email' => $request->email,
+            ],
+            [
+                'name' => $request->name,
+                'mobile' => $request->mobile,
+                'password' => bcrypt(Str::uuid())
+            ]
+        );
 
         auth()->login($user);
 
@@ -72,7 +76,7 @@ class RegisterController extends Controller
         $quantity = $request->quantity;
         $total = $product->price * $quantity;
         $customerId = $user->id;
-        $code = time().Str::random(12);
+        $code = time() . Str::random(12);
 
         $order = OrderService::createOrder($customerId, $total, $code);
         OrderService::createOrderItem($order->id, $product->id, $quantity, $total);

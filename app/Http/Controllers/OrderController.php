@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function resume($code)
+    public function resume(Request $request, $code)
     {
         $order = Order::where('code', $code)->with('items')->first();
+
+        if($order->customer_id !== $request->user()->id){
+            abort(403);
+        }
 
         return view('resume', [
             'order' => $order,

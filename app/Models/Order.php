@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    use HasFactory;
+
     const STATUS_CREATED = 'CREATED';
     const STATUS_PAYED = 'PAYED';
     const STATUS_REJECTED = 'REJECTED';

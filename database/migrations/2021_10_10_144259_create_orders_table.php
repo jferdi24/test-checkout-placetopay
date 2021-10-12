@@ -19,7 +19,10 @@ class CreateOrdersTable extends Migration
             $table->string('status', 20)->default('CREATED');
             $table->decimal('total');
             $table->string('code');
+
+//            $table->foreign('customer_id')->references('id')->on('users');
             $table->timestamps();
+
         });
 
         Schema::create('orders_items', function (Blueprint $table) {
