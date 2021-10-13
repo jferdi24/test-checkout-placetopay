@@ -1,3 +1,5 @@
+<span
+    class="hidden px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 bg-green-100 text-green-800 bg-blue-100 text-blue-800"></span>
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
     <tr>
@@ -27,14 +29,16 @@
             class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
             Estado
         </th>
-        <th scope="col"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
-            Acciones
-        </th>
+        @if(!$showCustomer)
+            <th scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                Acciones
+            </th>
+        @endif
     </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-    @foreach($orders as $order)
+    @forelse($orders as $order)
         <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ $loop->index + 1 }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $order->id }}</td>
@@ -51,15 +55,21 @@
             <td class="px-6 py-4 whitespace-nowrap">
                 {!! $order->statusLabel() !!}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-                @if($order->status != \App\Models\Order::STATUS_PAYED)
-                    <a href="{{ route('orders.resume', $order->code) }}"
-                       class="bg-green-500 hover:bg-green-900 px-4 py-1 rounded-3xl text-white">
-                        Pagar
-                    </a>
-                @endif
-            </td>
+            @if(!$showCustomer)
+                <td class="px-6 py-4 whitespace-nowrap">
+                    @if($order->status != \App\Models\Order::STATUS_PAYED)
+                        <a href="{{ route('orders.resume', $order->code) }}"
+                           class="bg-green-500 hover:bg-green-900 px-4 py-1 rounded-3xl text-white">
+                            Pagar
+                        </a>
+                    @endif
+                </td>
+            @endif
         </tr>
-    @endforeach
+    @empty
+        <tr>
+            <td colspan="7">No hay ordenes</td>
+        </tr>
+    @endforelse
     </tbody>
 </table>

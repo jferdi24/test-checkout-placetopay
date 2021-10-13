@@ -53,10 +53,10 @@ class GatewayController extends Controller
                 return response()->redirectTo($response->processUrl());
             } else {
                 // There was some error so check the message
-                var_dump($response->status()->message());
+                return response()->json($response->status()->message());
             }
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            return response()->json($e->getMessage());
         }
     }
 
@@ -67,6 +67,10 @@ class GatewayController extends Controller
 
         if ($order == false) {
             abort(404);
+        }
+
+        if (intval($order->customer_id) !== intval($request->user()->id)) {
+            abort(403);
         }
 
         $orderRequestPayment = OrderRequestPayment::where('order_id', $order->id)
@@ -99,10 +103,10 @@ class GatewayController extends Controller
                 ]);
             } else {
                 // There was some error with the connection so check the message
-                print_r($response->status()->message() . "\n");
+                return response()->json($response->status()->message() . "\n");
             }
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            return response()->json($e->getMessage());
         }
     }
 

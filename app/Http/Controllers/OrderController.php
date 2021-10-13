@@ -11,7 +11,11 @@ class OrderController extends Controller
     {
         $order = Order::where('code', $code)->with('items')->first();
 
-        if($order->customer_id !== $request->user()->id){
+        if ($order === null) {
+            abort(404);
+        }
+
+        if (intval($order->customer_id) !== intval($request->user()->id)) {
             abort(403);
         }
 
