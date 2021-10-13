@@ -12,11 +12,11 @@ cp .env.example .env
 
 - Colocar los valores de las variables en el archivo .env PLACETOPAY_LOGIN, PLACETOPAY_TRANKEY,   PLACETOPAY_BASE_URL
 - Configurar los datos de conexión para la base de datos
-- Instalar dependencias y ejecutar migraciones
-
+- Instalar dependencias, ejecutar migraciones y crear application key
 ```shell
 composer install
 php artisan migrate --seed
+php artisan key:generate
 ```
 
 ## Rutas
@@ -33,4 +33,8 @@ php artisan serve
 ```
 
 ## Tests
-Proximamente
+Para ejecutar los tests
+
+```shell
+php artisan test
+```
