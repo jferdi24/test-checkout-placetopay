@@ -25,7 +25,7 @@ class GatewayControllerTest extends TestCase
         $this
             ->actingAs($user)
             ->post(route('checkout.request', $order->code))
-            ->assertStatus(200);
+            ->assertStatus(302);
     }
 
     public function test_checkout_request_with_order_wrong()
