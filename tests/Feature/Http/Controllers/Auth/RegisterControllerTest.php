@@ -40,7 +40,7 @@ class RegisterControllerTest extends TestCase
 
         $response = $this->post(route('customers.register'), $data);
 
-        $order = Order::find(1);
+        $order = Order::query()->first();
 
         $response->assertRedirect(route('orders.resume', $order->code));
 
@@ -51,12 +51,12 @@ class RegisterControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('orders', [
-            'customer_id' => 1,
+            'customer_id' => auth()->user()->id,
             'total' => $product->price * $data['quantity'],
         ]);
 
         $this->assertDatabaseHas('orders_items', [
-            'product_id' => 1,
+            'product_id' => $product->id,
             'total' => $product->price * $data['quantity'],
         ]);
     }

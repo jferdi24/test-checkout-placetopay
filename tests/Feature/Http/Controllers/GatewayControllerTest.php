@@ -3,7 +3,6 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -19,7 +18,7 @@ class GatewayControllerTest extends TestCase
 
         $order = Order::factory()->create([
             'total' => 100,
-            'customer_id' => 1,
+            'customer_id' => $user->id,
         ]);
 
         $this
@@ -34,7 +33,7 @@ class GatewayControllerTest extends TestCase
 
         Order::factory()->create([
             'total' => 100,
-            'customer_id' => 1,
+            'customer_id' => $user->id,
         ]);
 
         $this

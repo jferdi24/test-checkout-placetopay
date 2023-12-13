@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\OrderService;
@@ -49,7 +47,7 @@ class RegisterController extends Controller
             [
                 'name' => $request->name,
                 'mobile' => $request->mobile,
-                'password' => bcrypt(Str::uuid())
+                'password' => bcrypt(Str::uuid()),
             ]
         );
 
@@ -76,7 +74,7 @@ class RegisterController extends Controller
         $quantity = $request->quantity;
         $total = $product->price * $quantity;
         $customerId = $user->id;
-        $code = time() . Str::random(12);
+        $code = time().Str::random(12);
 
         $order = OrderService::createOrder($customerId, $total, $code);
         OrderService::createOrderItem($order->id, $product->id, $quantity, $total);

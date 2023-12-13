@@ -10,7 +10,9 @@ class Order extends Model
     use HasFactory;
 
     const STATUS_CREATED = 'CREATED';
+
     const STATUS_PAYED = 'PAYED';
+
     const STATUS_REJECTED = 'REJECTED';
 
     protected $table = 'orders';
@@ -48,7 +50,7 @@ class Order extends Model
             $className = 'bg-red-100 text-red-800';
         }
 
-        return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full '.$className.'">' .
-            $this->status . '</span>';
+        return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full '.$className.'">'.
+            $this->status.'</span>';
     }
 }

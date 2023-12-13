@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total');
             $table->string('code');
 
-//            $table->foreign('customer_id')->references('id')->on('users');
+            //            $table->foreign('customer_id')->references('id')->on('users');
             $table->timestamps();
 
         });
