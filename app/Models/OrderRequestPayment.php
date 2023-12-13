@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRequestPayment extends Model
@@ -16,6 +15,4 @@ class OrderRequestPayment extends Model
         'response',
         'ending',
     ];
-
-
 }

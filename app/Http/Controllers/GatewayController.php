@@ -29,16 +29,16 @@ class GatewayController extends Controller
                     'total' => $order->total,
                 ],
             ],
-            "buyer" => [
-                "name" => $order->customer->name,
+            'buyer' => [
+                'name' => $order->customer->name,
                 // "surname" => "Hoppe",
-                "email" => $order->customer->email,
+                'email' => $order->customer->email,
                 // "document" => "1040035000",
                 // "documentType" => "CC",
-                "mobile" => $order->customer->mobile
+                'mobile' => $order->customer->mobile,
             ],
             'expiration' => date('c', strtotime(' + 2 days')),
-            'returnUrl' => route('checkout.response') . '?reference=' . $reference,
+            'returnUrl' => route('checkout.response').'?reference='.$reference,
             'ipAddress' => '127.0.0.1',
             'userAgent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
         ];
@@ -103,7 +103,7 @@ class GatewayController extends Controller
                 ]);
             } else {
                 // There was some error with the connection so check the message
-                return response()->json($response->status()->message() . "\n");
+                return response()->json($response->status()->message()."\n");
             }
         } catch (\Exception $e) {
             return response()->json($e->getMessage());

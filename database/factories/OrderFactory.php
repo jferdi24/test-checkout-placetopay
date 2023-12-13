@@ -26,7 +26,7 @@ class OrderFactory extends Factory
         return [
             'customer_id' => User::factory()->create(),
             'total' => $this->faker->numberBetween(30, 120),
-            'code' => time() . Str::random(12),
+            'code' => time().Str::random(12),
         ];
     }
 }
