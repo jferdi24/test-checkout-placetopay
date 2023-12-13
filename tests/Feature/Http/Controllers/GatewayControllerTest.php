@@ -18,7 +18,7 @@ class GatewayControllerTest extends TestCase
 
         $order = Order::factory()->create([
             'total' => 100,
-            'customer_id' => 1,
+            'customer_id' => $user->id,
         ]);
 
         $this
@@ -33,7 +33,7 @@ class GatewayControllerTest extends TestCase
 
         Order::factory()->create([
             'total' => 100,
-            'customer_id' => 1,
+            'customer_id' => $user->id,
         ]);
 
         $this
