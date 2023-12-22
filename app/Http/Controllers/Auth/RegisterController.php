@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\OrderService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class RegisterController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request): View
     {
         $productId = $request->product ?? 1;
-        $product = Product::find($productId);
+        $product = Product::query()->find($productId);
 
         $user = $request->user() ?? new User();
 
@@ -24,21 +26,24 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function storeData(Request $request)
+    public function storeData(Request $request): RedirectResponse
     {
-        $user = null;
-        if ($request->user() == null) {
-            $user = $this->createCustomer($request);
-        } else {
-            $user = $this->updateDataCustomer($request);
-        }
-
+        $user = $this->getUser($request);
         $code = $this->createOrder($request, $user);
 
         return response()->redirectToRoute('orders.resume', $code);
     }
 
-    protected function createCustomer(Request $request)
+    private function getUser(Request $request): User
+    {
+        if ($request->user() === null) {
+            return $this->createCustomer($request);
+        }
+
+        return $this->updateDataCustomer($request);
+    }
+
+    protected function createCustomer(Request $request): User
     {
         $user = User::updateOrcreate(
             [
@@ -56,20 +61,22 @@ class RegisterController extends Controller
         return $user;
     }
 
-    protected function updateDataCustomer(Request $request)
+    protected function updateDataCustomer(Request $request): User
     {
         $user = $request->user();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->mobile = $request->mobile;
+
         $user->update();
 
         return $user;
     }
 
-    protected function createOrder(Request $request, $user)
+    protected function createOrder(Request $request, $user): string
     {
-        $product = Product::find($request->product_id);
+        /** @var Product $product */
+        $product = Product::query()->find($request->product_id);
 
         $quantity = $request->quantity;
         $total = $product->price * $quantity;

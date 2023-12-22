@@ -2,27 +2,24 @@
 
 namespace App\Providers;
 
+use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
-        //
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-        //
+        $this->app->bind('client-placetopay', function () {
+            return new PlacetoPay([
+                'login' => config('placetopay.login'),
+                'tranKey' => config('placetopay.trankey'),
+                'baseUrl' => config('placetopay.baseUrl'),
+                'timeout' => 10,
+            ]);
+        });
     }
 }

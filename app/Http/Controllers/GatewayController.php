@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderRequestPayment;
 use Dnetix\Redirection\PlacetoPay;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class GatewayController extends Controller
 {
-    public function checkoutRequest($code)
+    public function checkoutRequest($code): RedirectResponse|JsonResponse
     {
-        $order = Order::where('code', $code)->first();
-
-        if ($order == false) {
-            abort(404);
-        }
+        /** @var Order $order */
+        $order = Order::query()->where('code', $code)->firstOrFail();
 
         $placetopay = $this->getClient();
 
@@ -47,33 +47,30 @@ class GatewayController extends Controller
             $response = $placetopay->request($request);
 
             if ($response->isSuccessful()) {
-                // Redirect the client to the processUrl or display it on the JS extension
                 $this->createRequestPayment($order->id, $response->requestId(), $response->processUrl());
 
                 return response()->redirectTo($response->processUrl());
-            } else {
-                // There was some error so check the message
-                return response()->json($response->status()->message());
             }
+
+            return response()->json($response->status()->message());
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
     }
 
-    public function checkoutResponse(Request $request)
+    public function checkoutResponse(Request $request): View|JsonResponse
     {
         $reference = $request->reference;
-        $order = Order::where('code', $reference)->first();
 
-        if ($order == false) {
-            abort(404);
-        }
+        /** @var Order $order */
+        $order = Order::query()->where('code', $reference)->firstOrFail();
 
         if (intval($order->customer_id) !== intval($request->user()->id)) {
             abort(403);
         }
 
-        $orderRequestPayment = OrderRequestPayment::where('order_id', $order->id)
+        $orderRequestPayment = OrderRequestPayment::query()
+            ->where('order_id', $order->id)
             ->where('ending', 0)
             ->latest()
             ->first();
@@ -84,8 +81,6 @@ class GatewayController extends Controller
             $response = $placetopay->query($orderRequestPayment->request_id);
 
             if ($response->isSuccessful()) {
-                // In order to use the functions please refer to the RedirectInformation class
-
                 if ($response->status()->isApproved()) {
                     $orderRequestPayment->status = $response->status()->status();
                     $orderRequestPayment->ending = 1;
@@ -101,26 +96,20 @@ class GatewayController extends Controller
                 return view('order-response', [
                     'message' => $response->status()->message(),
                 ]);
-            } else {
-                // There was some error with the connection so check the message
-                return response()->json($response->status()->message()."\n");
             }
+
+            return response()->json($response->status()->message()."\n");
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
     }
 
-    protected function getClient()
+    protected function getClient(): PlacetoPay
     {
-        return new PlacetoPay([
-            'login' => config('placetopay.login'), // Provided by PlacetoPay
-            'tranKey' => config('placetopay.trankey'), // Provided by PlacetoPay
-            'baseUrl' => config('placetopay.baseUrl'),
-            'timeout' => 10, // (optional) 15 by default
-        ]);
+        return app('client-placetopay');
     }
 
-    protected function createRequestPayment($orderId, $requestId, $requestUrl)
+    protected function createRequestPayment($orderId, $requestId, $requestUrl): void
     {
         OrderRequestPayment::create([
             'order_id' => $orderId,
