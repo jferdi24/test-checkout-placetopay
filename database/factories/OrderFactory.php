@@ -9,19 +9,11 @@ use Illuminate\Support\Str;
 
 class OrderFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
+    /** @var class-string<\Illuminate\Database\Eloquent\Model> */
     protected $model = Order::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    /** @return array<string, mixed> */
+    public function definition(): array
     {
         return [
             'customer_id' => User::factory()->create(),

@@ -3,38 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-    public function resume(Request $request, $code)
+    public function resume(string $code): View
     {
-        $order = Order::where('code', $code)->with('items')->first();
+        /** @var User $user */
+        $user = auth()->user();
 
-        if ($order === null) {
-            abort(404);
-        }
-
-        if (intval($order->customer_id) !== intval($request->user()->id)) {
-            abort(403);
-        }
+        /** @var Order $order */
+        $order = Order::query()
+            ->where('code', $code)
+            ->where('customer_id', $user->id)
+            ->with('items')
+            ->firstOrFail();
 
         return view('resume', [
             'order' => $order,
         ]);
     }
 
-    public function adminListOrders()
+    public function adminListOrders(): View
     {
         return view('orders-list-admin', [
-            'orders' => Order::get(),
+            'orders' => Order::query()->get(),
         ]);
     }
 
-    public function listOrders(Request $request)
+    public function listOrders(): View
     {
+        /** @var User $user */
+        $user = auth()->user();
+
         return view('orders-list', [
-            'orders' => Order::where('customer_id', $request->user()->id)->get(),
+            'orders' => Order::query()->where('customer_id', $user->id)->get(),
         ]);
     }
 }

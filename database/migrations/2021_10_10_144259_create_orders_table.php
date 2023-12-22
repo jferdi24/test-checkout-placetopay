@@ -4,14 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
@@ -20,9 +15,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total');
             $table->string('code');
 
-            //            $table->foreign('customer_id')->references('id')->on('users');
             $table->timestamps();
-
         });
 
         Schema::create('orders_items', function (Blueprint $table) {
@@ -41,19 +34,15 @@ class CreateOrdersTable extends Migration
             $table->text('response')->nullable();
             $table->boolean('ending')->default(0);
             $table->string('status')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('orders');
         Schema::dropIfExists('orders_items');
         Schema::dropIfExists('orders_requests_payments');
     }
-}
+};

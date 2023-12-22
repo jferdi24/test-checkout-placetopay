@@ -76,8 +76,8 @@ class OrderControllerTest extends TestCase
         $this
             ->actingAs($user)
             ->get(route('orders.resume', $order->code))
-            ->assertSee('403')
-            ->assertStatus(403);
+            ->assertSee('404')
+            ->assertStatus(404);
     }
 
     public function test_admin_list_orders_view()

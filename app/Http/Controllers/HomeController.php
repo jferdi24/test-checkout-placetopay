@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function __invoke(): View
     {
-        $products = Product::get();
-
-        return view('home', compact('products'));
+        return view('home', [
+            'products' => Product::query()->get(),
+        ]);
     }
 }

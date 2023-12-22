@@ -7,7 +7,7 @@ use App\Models\OrderItem;
 
 abstract class OrderService
 {
-    public static function createOrderItem($orderId, $productId, $quantity, $total)
+    public static function createOrderItem(int $orderId, int $productId, int $quantity, float $total): OrderItem
     {
         return OrderItem::create([
             'order_id' => $orderId,
@@ -17,7 +17,7 @@ abstract class OrderService
         ]);
     }
 
-    public static function createOrder($customerId, float $total, $code)
+    public static function createOrder(int $customerId, float $total, string $code): Order
     {
         return Order::create([
             'customer_id' => $customerId,
